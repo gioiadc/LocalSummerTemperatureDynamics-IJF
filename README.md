@@ -17,6 +17,8 @@ Last update: March 1, 2026
    vincenzo.gioia@units.it
  - Gioia Di Credico, University of Trieste
    gioia.dicredico@deams.units.it
+ - Francesco Pauli, University of Trieste
+   francesco.pauli@deams.units.it
 
 ## Environment
   
