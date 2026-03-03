@@ -10,6 +10,7 @@ submitted to the International Journal of Forecasting.
 
 Summer temperatures may exhibit prolonged periods of extremely high temperatures, informally referred to as heat waves. Operative definitions entail temperature abnormality, persistence over time, and, possibly, impact on ecosystems and human life.  Historical episodes and stochastic patterns of heat waves can be described upon adopting a specific definition using observed temperature data. Atmosphere and local conditions may affect the variability of the phenomenon, making the study and prediction of temperature dynamics and heat waves complex. Hence, the proposal of a dynamic hidden Markov model, which incorporates natural seasonality and a large-scale climate index along with tail modelling, to explore the annual distribution of heat wave metrics. Different classification methods for describing and forecasting heat wave periods are considered. The proposal is illustrated using the local maximum daily temperatures of two geographically close and heterogeneous locations of the Italian region Friuli Venezia Giulia.
 
+First package version: Feb 1, 2025
 Last update: March 1, 2026
 
 ### Contacts
