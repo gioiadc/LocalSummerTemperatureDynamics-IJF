@@ -28,11 +28,6 @@ Last update: March 1, 2026
 
    Operating systems tested: macOS (Apple M1 Pro, 16GB RAM) and Windows (11)
 
-   The package `rstan` requires a working C++ toolchain: 
-  
-    - Windows users must install Rtools; 
-    - macOS users must install Xcode Command Line Tools.
-
 ### `renv`
 
 To ensure computational reproducibility, this repository uses the renv package to manage the R package environment.
