@@ -22,22 +22,40 @@ Last update: March 1, 2026
  - Francesco Pauli, University of Trieste
    francesco.pauli@deams.units.it
 
-## Environment
-  
-  R version: 4.4.2
-  
-  Operating systems tested: macOS (Apple M1 Pro, 16GB RAM) and Windows (11)
-  
+## Software Environment 
 
+   R version: 4.4.2
 
-  To install missing packages, from a clean R session run `0_InstallPackages.R`.
-  
-  The package `rstan` requires a working C++ toolchain: 
+   Operating systems tested: macOS (Apple M1 Pro, 16GB RAM) and Windows (11)
+
+   The package `rstan` requires a working C++ toolchain: 
   
     - Windows users must install Rtools; 
     - macOS users must install Xcode Command Line Tools.
 
-  The file `SessionInfo09112025.R` contains full session information and package versions.
+### `renv`
+
+To ensure computational reproducibility, this repository uses the renv package to manage the R package environment.
+
+The file `renv.lock` included in the repository records the last versions of all R packages tested in the project.
+
+To recreate the same software environment, run the following commands from a clean R session after cloning or downloading the repository:
+
+
+```
+install.packages("renv")
+renv::restore()
+```
+
+The command `renv::restore()` will automatically install the package versions specified in `renv.lock`.
+After restoring the environment, the scripts can be executed following the steps described in the Set-up section.
+
+### `rstan`
+The package `rstan` requires a working C++ toolchain: 
+  
+    - Windows users must install Rtools; 
+    - macOS users must install Xcode Command Line Tools.
+    
 
 ## Repository Structure
 
@@ -68,10 +86,9 @@ Code/
 ├── 2_HWrResults.R
 ├── 2_ModelResults.R
 ├── 3_Plot_boxplot.R
-├── 3_Plot_prob2018.R
-├── 3_PlotTrajSeas_K5.R
-├── 3_SM_Results.R
-└── SessionInfo09112025.R  # Package versions and session information
+├── 3_Fig2.R
+├── 3_Fig3-S7.R
+└── 3_SM_Results.R
 ```
 
 ## Data Description
@@ -107,9 +124,9 @@ Steps to reproduce the results of the paper. From a clean R session
       - `1_FitStan.R`: fits all the models used in the paper. Fitted models are saved in the folder `ResultsGST/`. Each fitted model is saved as `.RData` file of size has dimension 700 MB - 1.4 GB, depending on the number of states
       - `2_HWrResults.R`: generates the results of the empirical quantile-based approach. Results are saved in the folder `HeatwaveR/`
       - `2_ModelResults.R`: all MCMC models must be fitted before running this script. This script generates the posterior quantities needed for the results in Section 3.2 (LOOIC), Section 3.3 (estimated filtered probabilities; periods classified as heat waves for 2018; simulated temperature trajectories for 2024 and estimated mean effects for all the regimes; simulated regimes for the in-sample and out-of-sample generated trajectories, needed for extracting the predicted heat wave metrics) and all the results in Supplementary Material (e.g., differences in elpd reported in Table T2 of the Supplementary Material).  Results are saved in the folder `ExtractedResults/`
-      - `3_Plot_prob2018.R`: reproduces Figure 2 of the paper. Figures are saved in the folder `Plots/`
-      - `3_PlotTrajSeas_K5.R`: reproduces Figure 3 of the paper and Figure S8 of the Supplementary Material Figures are saved in the folder `Plots/`
-      - `3_Plot_boxplot.R`: reproduces all the boxplots reported; namely, Figures 4-5 of the paper and Figures S9 - S12 of the Supplementary Material. Figures are saved in the folder `Plots/`
+      - `3_Fig2.R`: reproduces Figure 2 of the paper. Figures are saved in the folder `Plots/`
+      - `3_Fig3-S7.R`: reproduces Figure 3 of the paper and Figure S7 of the Supplementary Material Figures are saved in the folder `Plots/`
+      - `3_Fig4-5-S9-S11.R`: reproduces all the boxplots reported; namely, Figures 4-5 of the paper and Figures S9 - S11 of the Supplementary Material. Figures are saved in the folder `Plots/`
       - `3_SM_Results.R`: contains the code for obtaining some of the results reported in the Supplementary Material, in particular Figures S1 - S7, and Table T1. Figures are saved in the folder `Plots/` and intermediary data in the folder `ExtractedResults/`
 
 ### Computational time
@@ -119,6 +136,9 @@ For 2000 MCMC iterations per model (parallel computing using 4 cores):
   - on Windows systems: computation may require several hours
     
 To ensures reproducibility of MCMC initialization a seed is set in file `functions/fitSTAN.R` (line 295).
+The seed on `2_ModelResults.R` line 23 (200 trajectories selections)
+`3_Fig3-S7.R` line 14
+`3_Fig4-5-S8-S9-S10-S11.R` line 32
 
 Minor differences across operating systems may arise due to parallelization and numerical precision but should not affect substantive results. 
 
