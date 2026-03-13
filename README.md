@@ -41,7 +41,7 @@ These tools must be installed before running `renv::restore()`.
 
 This repository uses the `renv` package to manage the R package environment. 
 
-The file `renv.lock` records the exact versions of all R packages tested in the project.
+The file `renv.lock` records the exact versions of all R packages used in the project.
 
 To recreate the same software environment, run the following commands from a clean R session and with the working directory set to the main repository folder:
 
@@ -108,8 +108,7 @@ Some daily missing values (2 for Capriva and 20 for Trieste) are handled using s
 
 ### Intermediary Data
 
-Results used in the paper are included in the repository to facilitate reproducibility 
-of the figures and tables without re-running the full MCMC estimation
+Results used in the paper are included in the repository to facilitate reproduction of the figures and tables without re-running the full MCMC estimation.
 
  - `ExtractedResults/` contains posterior quantities derived from the fitted models running `2_ModelResults.R`
  - `HeatwaveR/` contains the results of the empirical quantile-based approach running `2_HWrResults.R`
@@ -117,7 +116,8 @@ of the figures and tables without re-running the full MCMC estimation
 
 ## Reproducing the Results
 
-Please note that the repository has been tested from a clean R session using the environment specified in `renv.lock`.
+The repository has been tested from a clean R session using the environment specified in `renv.lock`.
+All figures and tables can be reproduced directly using the stored intermediate results without re-running the MCMC estimation.
 
   1. Set the working directory to the `Code` folder or open the `CodeGitHub.Rproj` file using RStudio
   2. To reproduce the analysis using the last tested package versions, set the `renv` package as described in the [Software Environment](#software-environment) section
@@ -137,7 +137,8 @@ For 2000 MCMC iterations per model (parallel computing using 4 cores):
   - on macOS (Apple M1 Pro, 16 GB RAM): approximately 6–30 minutes, depending on the number of regimes
   - on Windows systems: may require several hours
     
-To ensures reproducibility of MCMC initialization, a seed is set in file `functions/fitSTAN.R` (line 295).
+To ensure reproducibility of MCMC initialization, a seed is set in the file `functions/fitSTAN.R` (line 295).
+
 We report (commented) the seeds used for trajectories selection on: i) `2_ModelResults.R` line 23, ii) `3_Fig3-S7.R` line 15, and iii)  `3_Fig4-5-S8-S9-S10-S11.R` line 32.
 
 Minor differences across operating systems may arise due to parallelization and numerical precision but should not affect substantive results. 
