@@ -24,15 +24,22 @@ Last update: March 1, 2026
 
 ## Software Environment 
 
-   R version: 4.4.2
-
    Operating systems tested: macOS (Apple M1 Pro, 16GB RAM) and Windows (11)
 
-  All file paths are relative to the root of the package. Please set your working directory accordingly, or open the .Rproj file using RStudio.
+  All file paths are relative to the root of the package. Please set your working directory accordingly, or open the `CodeGitHub.Rproj` file using RStudio.
+
+### `rstan`
+The package `rstan` requires a working C++ toolchain: 
+  
+    - Windows users must install Rtools; 
+    - macOS users must install Xcode Command Line Tools.
+
+These tools must be installed before running `renv::restore()`.
+
 
 ### `renv`
 
-To ensure computational reproducibility, this repository uses the `renv` package to manage the R package environment.
+This repository uses the `renv` package to manage the R package environment. 
 
 The file `renv.lock` records the exact versions of all R packages tested in the project.
 
@@ -47,11 +54,6 @@ renv::restore() # install dependencies
 The command `renv::restore()` will automatically install the package versions specified in `renv.lock`.
 After restoring the environment, the scripts can be executed following the steps described in the Set-up section below.
 
-### `rstan`
-The package `rstan` requires a working C++ toolchain: 
-  
-    - Windows users must install Rtools; 
-    - macOS users must install Xcode Command Line Tools.
     
 
 ## Repository Structure
@@ -106,17 +108,16 @@ Some daily missing values (2 for Capriva and 20 for Trieste) are handled using s
 
 ### Intermediary Data
 
-Some scripts generate intermediary .RData objects saved in:
+Results used in the paper are included in the repository to facilitate reproducibility 
+of the figures and tables without re-running the full MCMC estimation
 
- - ResultsGST/: the models fitted via `1_FitStan.R`
- - ExtractedResults/: the model results from `2_ModelResults.R`
- - HeatwaveR/: the results from `2_HWrResults.R`
+ - `ExtractedResults/` contains posterior quantities derived from the fitted models running `2_ModelResults.R`
+ - `HeatwaveR/` contains the results of the empirical quantile-based approach running `2_HWrResults.R`
 
-Model outputs of the models presented in the paper are included in the `ExtractedResults/` folder to allow reproduction of the figures and tables without re-running the full MCMC estimation.
 
 ## Reproducing the Results
 
-Steps to reproduce the results of the paper. Please note that the repository has been tested from a clean R session using the environment specified in `renv.lock`. From a clean R session
+Please note that the repository has been tested from a clean R session using the environment specified in `renv.lock`.
 
   1. Set the working directory to the `Code` folder or open the `CodeGitHub.Rproj` file using RStudio
   2. To reproduce the analysis using the last tested package versions, set the `renv` package as described in the Software Environment section
