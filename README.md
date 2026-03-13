@@ -12,7 +12,7 @@ Summer temperatures may exhibit prolonged periods of extremely high temperatures
 
 First package version: Feb 1, 2025
 
-Last update: March 1, 2026
+Last update: March 13, 2026
 
 ### Contacts
  - Vincenzo Gioia, University of Trieste
@@ -52,7 +52,7 @@ renv::restore() # install dependencies
 ```
 
 The command `renv::restore()` will automatically install the package versions specified in `renv.lock`.
-After restoring the environment, the scripts can be executed following the steps described in the Set-up section below.
+After restoring the environment, the scripts can be executed following the steps described in the [Reproducing the Results](#reproducing-the-results) section below.
 
     
 
@@ -120,7 +120,7 @@ of the figures and tables without re-running the full MCMC estimation
 Please note that the repository has been tested from a clean R session using the environment specified in `renv.lock`.
 
   1. Set the working directory to the `Code` folder or open the `CodeGitHub.Rproj` file using RStudio
-  2. To reproduce the analysis using the last tested package versions, set the `renv` package as described in the Software Environment section
+  2. To reproduce the analysis using the last tested package versions, set the `renv` package as described in the [Software Environment](#software-environment) section
   3. Run the following scripts in order
 
       - `1_FitStan.R`: fits all the models used in the paper. Fitted models are saved in the folder `ResultsGST/`. Each fitted model is saved as a `.RData` file with size between 700 MB and 1.4 GB, depending on the number of states
@@ -135,7 +135,7 @@ Please note that the repository has been tested from a clean R session using the
 
 For 2000 MCMC iterations per model (parallel computing using 4 cores):
   - on macOS (Apple M1 Pro, 16 GB RAM): approximately 6–30 minutes, depending on the number of regimes
-  - on Windows systems: computation may require several hours
+  - on Windows systems: may require several hours
     
 To ensures reproducibility of MCMC initialization, a seed is set in file `functions/fitSTAN.R` (line 295).
 We report (commented) the seeds used for trajectories selection on: i) `2_ModelResults.R` line 23, ii) `3_Fig3-S7.R` line 15, and iii)  `3_Fig4-5-S8-S9-S10-S11.R` line 32.
