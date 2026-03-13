@@ -56,11 +56,20 @@ label_year <- 1995:2024
 
 idx_origin <- (120:272 - 120)/152
 
-load("ExtractedResults/TempTrajCapriva_from2019_to2024_Bayes.Rda")
+load("ExtractedResults/TempTrajCapriva_from2019_to2024_Bayes_1.Rda")
+load("ExtractedResults/TempTrajCapriva_from2019_to2024_Bayes_2.Rda")
+TempTraj <- c(TempTraj1, TempTraj2)
+rm(TempTraj1, TempTraj2)
+
 TempTrajC <- lapply(1:length(TempTraj), function(x){
   lapply(1:length(TempTraj[[1]]), function(z) TempTraj[[x]][[z]][, idx])
 })
-load("ExtractedResults/TempTrajTrieste_from2019_to2024_Bayes.Rda")
+
+load("ExtractedResults/TempTrajTrieste_from2019_to2024_Bayes_1.Rda")
+load("ExtractedResults/TempTrajTrieste_from2019_to2024_Bayes_2.Rda")
+TempTraj <- c(TempTraj1, TempTraj2)
+rm(TempTraj1, TempTraj2)
+
 TempTrajT <- lapply(1:length(TempTraj), function(x){
    lapply(1:length(TempTraj[[1]]), function(z) TempTraj[[x]][[z]][, idx])
  })

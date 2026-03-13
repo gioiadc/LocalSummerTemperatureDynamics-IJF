@@ -59,7 +59,11 @@ chi_vals <- chi_vals[[1]]
 
 # MS results
 
-load("ExtractedResults/TempTrajCapriva_from2019_to2024_Bayes.Rda")
+load("ExtractedResults/TempTrajCapriva_from2019_to2024_Bayes_1.Rda.Rda")
+load("ExtractedResults/TempTrajCapriva_from2019_to2024_Bayes_2.Rda.Rda")
+
+TempTraj <- c(TempTraj1, TempTraj2)
+rm(TempTraj1, TempTraj2)
 
 X <- do.call("rbind",TempTraj[[1]])
 matK2N <- list()

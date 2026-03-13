@@ -157,8 +157,11 @@ save(outTraj, file = "ExtractedResults/TempTrajCapriva_from2019_to2024_Bayes_all
 
 # Extract temperature trajectories (last regime N, Out of Sample)
 # Figure 3 - S4-S5-S6-S7
-TempTraj <- TempTraj[idx_model]
-save(TempTraj, file = "ExtractedResults/TempTrajCapriva_from2019_to2024_Bayes.Rda")
+TempTraj1 <- TempTraj[idx_model[1:2]]
+save(TempTraj1, file = "ExtractedResults/TempTrajCapriva_from2019_to2024_Bayes_1.Rda")
+
+TempTraj2 <- TempTraj[idx_model[3:4]]
+save(TempTraj2, file = "ExtractedResults/TempTrajCapriva_from2019_to2024_Bayes_2.Rda")
 
 save(StatesOut, file = "ExtractedResults/StatesOutCapriva_from2019_to2024_Bayes.Rda")
 
@@ -176,7 +179,7 @@ save(outTraj, file = "ExtractedResults/TempPredCapriva_up2018_Bayes.Rda")
 save(outStates, file = "ExtractedResults/StatesInCapriva_up2018_Bayes.Rda")
 
 # Fig 2
-HatProbIn <- HatProbIn[c(1,4,7,10)]
+HatProbIn <- HatProbIn[idx_model]
 save(HatProbIn, file = "ExtractedResults/HatProbInCapriva_up2018_Bayes.Rda")
 save(Exc, file = "ExtractedResults/ExcCapriva_up2018_Bayes.Rda")
 
@@ -306,8 +309,11 @@ save(outTraj, file = "ExtractedResults/TempTrajTrieste_from2019_to2024_Bayes_all
 
 # Extract temperature trajectories (last regime N, Out of Sample)
 # Figure 3 - S4-S5-S6-S7
-TempTraj <- TempTraj[idx_model]
-save(TempTraj, file = "ExtractedResults/TempTrajTrieste_from2019_to2024_Bayes.Rda")
+TempTraj1 <- TempTraj[idx_model[1:2]]
+save(TempTraj1, file = "ExtractedResults/TempTrajTrieste_from2019_to2024_Bayes_1.Rda")
+
+TempTraj2 <- TempTraj[idx_model[3:4]]
+save(TempTraj2, file = "ExtractedResults/TempTrajTrieste_from2019_to2024_Bayes_2.Rda")
 
 save(StatesOut, file = "ExtractedResults/StatesOutTrieste_from2019_to2024_Bayes.Rda")
 
