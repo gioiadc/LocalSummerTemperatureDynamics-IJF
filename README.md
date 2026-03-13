@@ -117,19 +117,27 @@ Results used in the paper are included in the repository to facilitate reproduct
 ## Reproducing the Results
 
 The repository has been tested from a clean R session using the environment specified in `renv.lock`.
-All figures and tables can be reproduced directly using the stored intermediate results without re-running the MCMC estimation.
+All figures and tables can be reproduced directly using the stored intermediate results without re-running the MCMC estimation starting from files named `3_[***].R`.
 
   1. Set the working directory to the `Code` folder or open the `CodeGitHub.Rproj` file using RStudio
   2. To reproduce the analysis using the last tested package versions, set the `renv` package as described in the [Software Environment](#software-environment) section
   3. Run the following scripts in order
 
-      - `1_FitStan.R`: fits all the models used in the paper. Fitted models are saved in the folder `ResultsGST/`. Each fitted model is saved as a `.RData` file with size between 700 MB and 1.4 GB, depending on the number of states
-      - `2_HWrResults.R`: generates the results of the empirical quantile-based approach. Results are saved in the folder `HeatwaveR/`. We included HWr results used in the paper, if the file `2_HWrResults.R` is executed, files will be overwritten.
-      - `2_ModelResults.R`: all MCMC models must be fitted before running this script. This script generates the posterior quantities needed for the results in Section 3.2 (LOOIC), Section 3.3 (estimated filtered probabilities; periods classified as heat waves for 2018; simulated temperature trajectories for 2024 and estimated mean effects for all the regimes; simulated regimes for the in-sample and out-of-sample generated trajectories, needed for extracting the predicted heat wave metrics) and all the results in Supplementary Material (e.g., differences in elpd reported in Table T2 of the Supplementary Material).  Results are saved in the folder `ExtractedResults/`. We included MCMC model results used in the paper, to reproduce the analysis without running all the models. If the file `2_ModelResults.R` is executed, files will be overwritten.
-      - `3_Fig2.R`: reproduces Figure 2 of the paper. Figures are saved in the folder `Plots/`
-      - `3_Fig3-S7.R`: reproduces Figure 3 of the paper and Figure S7 of the Supplementary Material Figures are saved in the folder `Plots/`
-      - `3_Fig4-5-S9-S11.R`: reproduces all the boxplots reported; namely, Figures 4-5 of the paper and Figures S9 - S11 of the Supplementary Material. Figures are saved in the folder `Plots/`
-      - `3_SM_Results.R`: contains the code for obtaining some of the results reported in the Supplementary Material, in particular Figures S1 - S7, and Table T1. Figures are saved in the folder `Plots/` and intermediary data in the folder `ExtractedResults/`
+      - `1_FitStan.R`: fits all the models used in the paper. Fitted models are saved in the folder `ResultsGST/`. 
+      Each fitted model is saved as a `.RData` file with size between 700 MB and 1.4 GB, depending on the number of states.
+      - `2_HWrResults.R`: generates the results of the empirical quantile-based approach. Results are saved in the folder
+      `HeatwaveR/`. The folder contains HWr results used in the paper, if the file `2_HWrResults.R` is executed, files will be overwritten.
+      - `2_ModelResults.R`: generates the posterior quantities needed for figures and tables. Results are saved in the folder `ExtractedResults/`. 
+      All MCMC models must be fitted before running this script. However, we included MCMC model results used in the paper, to reproduce the analysis without running all the models. 
+      If the file `2_ModelResults.R` is executed, files will be overwritten.
+      - `3_Fig2.R`: reproduces Figure 2 of the paper. The figure is saved in the folder `Plots/`.
+      - `3_Fig3-S7.R`: reproduces Figure 3 of the paper and Figure S7 of the Supplementary Material. Figures are saved in the folder `Plots/`.
+      - `3_Fig4-5-S8-S9-S10-S11.R`: reproduces all the boxplots reported; namely, Figures 4-5 of the paper and Figures S8 - S11 of the Supplementary Material. Figures are saved in the folder `Plots/`.
+      - `3_FigS1-S4-S5-S6.R`: contains the code for obtaining Figures S1 - S4 - S5 - S6. Figures are saved in the folder `Plots/`.
+      - `3_Tab1-T2.R`: reproduces results of Table 1 of the paper and Table T2 in the Supplementary Material.
+      - `3_TabT1_FigS2-S3.R`: reproduces results of Table T1, and Figures S2 - S3 of the Supplementary Material. Figures are saved in the folder `Plots/`.
+
+
 
 ### Computational time
 
@@ -138,8 +146,6 @@ For 2000 MCMC iterations per model (parallel computing using 4 cores):
   - on Windows systems: may require several hours
     
 To ensure reproducibility of MCMC initialization, a seed is set in the file `functions/fitSTAN.R` (line 295).
-
-We report (commented) the seeds used for trajectories selection on: i) `2_ModelResults.R` line 23, ii) `3_Fig3-S7.R` line 15, and iii)  `3_Fig4-5-S8-S9-S10-S11.R` line 32.
 
 Minor differences across operating systems may arise due to parallelization and numerical precision but should not affect substantive results. 
 

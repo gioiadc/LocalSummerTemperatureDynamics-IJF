@@ -59,8 +59,8 @@ chi_vals <- chi_vals[[1]]
 
 # MS results
 
-load("ExtractedResults/TempTrajCapriva_from2019_to2024_Bayes_1.Rda.Rda")
-load("ExtractedResults/TempTrajCapriva_from2019_to2024_Bayes_2.Rda.Rda")
+load("ExtractedResults/TempTrajCapriva_from2019_to2024_Bayes_1.Rda")
+load("ExtractedResults/TempTrajCapriva_from2019_to2024_Bayes_2.Rda")
 
 TempTraj <- c(TempTraj1, TempTraj2)
 rm(TempTraj1, TempTraj2)
@@ -171,7 +171,6 @@ thetaPerk <- extremalindex(x, Perk, method = c("runs"), run.length = 1)[1]
 thetaPerk <-  cbind(theta = thetaPerk, K = 2:5)
 
 # MS results
-load("ExtractedResults/TempTrajCapriva_from2019_to2024_Bayes.Rda")
 
 X_list <- list(
   do.call("rbind", TempTraj[[1]]),
