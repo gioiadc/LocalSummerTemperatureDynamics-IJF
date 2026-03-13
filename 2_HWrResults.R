@@ -28,14 +28,16 @@ extract_HWsw_summary <- function(obj, year_start, year_end,
                                   date = rep(NA, ndays * nyears),
                                   MaxT = rep(NA, ndays * nyears),
                                   seas = rep(NA, ndays * nyears),
-                                  tresh = rep(NA, ndays * nyears),
+                                  thresh = rep(NA, ndays * nyears),
                                   excedance = rep(NA, ndays *nyears),
                                   flag_excedance = rep(NA, ndays *nyears))
   
   for(j in 1 : nyears){
     data_smoothwindow$date[((j - 1) * ndays + 1) : (j * ndays)] <- obj$date[obj$date>=list_period$start[j] & obj$date <= list_period$end[j]]  
-    data_smoothwindow[((j - 1) * ndays + 1) : (j * ndays), c(4,5,6)] <-  obj[obj$date>=list_period$start[j] & obj$date <= list_period$end[j], 3:5]
+    #data_smoothwindow[((j - 1) * ndays + 1) : (j * ndays), c(4,5,6)] <-  obj[obj$date>=list_period$start[j] & obj$date <= list_period$end[j], 3:5]
+    data_smoothwindow[((j - 1) * ndays + 1) : (j * ndays), c("MaxT","seas", "thresh")] <-  obj[obj$date>=list_period$start[j] & obj$date <= list_period$end[j], c("MaxT", "seas", "thresh") ]
   }
+  colnames(data_smoothwindow)[which(colnames(data_smoothwindow) == "thresh")] <- "tresh"
   
   data_smoothwindow$date <- as.Date(data_smoothwindow$date)
   
@@ -56,35 +58,44 @@ extract_HWsw_summary <- function(obj, year_start, year_end,
   HW_summary <- list()
   flag_OK <- TRUE
   count <- 1
-  iter <- 1
-  while(flag_OK){
-    value <- HW$flag_excedance[count] 
-    
-    HW_summary[[iter]] <- data.frame(year = HW$years[count],
-                                     doy_start = HW$doy[count],
-                                     doy_end = HW$doy[count + value - 1], 
-                                     ndays = value) 
-    count <- count + value
-    iter <- iter + 1
-    if(count > nrow(HW)){
-      flag_OK <- FALSE
+  iter <- 1 
+  if(nrow(HW) > 0){
+    while(flag_OK){
+      value <- HW$flag_excedance[count] 
+      
+      HW_summary[[iter]] <- data.frame(year = HW$years[count],
+                                       doy_start = HW$doy[count],
+                                       doy_end = HW$doy[count + value - 1], 
+                                       ndays = value) 
+      count <- count + value
+      iter <- iter + 1
+      if(count > nrow(HW) ){
+        flag_OK <- FALSE
+      }
     }
+    out <- do.call("rbind", HW_summary)  
+    
+    
+    nHWpy <- data.frame(year = year_start:year_end,
+                        nHW = rep(0, year_end - year_start + 1)) 
+    nHWpy$nHW[which(nHWpy$year %in% as.numeric(names(table(out$year))))] <-   table(out$year)
+    nHWdpy <- data.frame(year = year_start:year_end,
+                         nHWdays = rep(0, year_end - year_start + 1))
+    
+    extrNdays <- aggregate(ndays ~ year, data = out, FUN=cumsum)[,2]
+    nHWdpy$nHWdays[which(nHWpy$year %in% as.numeric(names(table(out$year))))] <- unlist(lapply(1:length(extrNdays), function(x) extrNdays[[x]][length(extrNdays[[x]])]))  
+    
+    return(list(res = data_smoothwindow,
+                summaryHW = out,
+                noHWperyear = nHWpy,
+                noHWdaysperyear = nHWdpy))
+  } else {
+    return(list(res = data_smoothwindow,
+                summaryHW = data.frame(year = year_start:year_end, doy_start = NA, doy_end = NA, ndays = NA),
+                noHWperyear = data.frame(year = year_start:year_end, nHW = 0),
+                noHWdaysperyear = data.frame(year = year_start:year_end, nHWdays = 0)))
+    
   }
-  
-  out <- do.call("rbind", HW_summary)
-  nHWpy <- data.frame(year = year_start:year_end,
-                      nHW = rep(0, year_end - year_start + 1)) 
-  nHWpy$nHW[which(nHWpy$year %in% as.numeric(names(table(out$year))))] <-   table(out$year)
-  nHWdpy <- data.frame(year = year_start:year_end,
-                       nHWdays = rep(0, year_end - year_start + 1))
-  
-  extrNdays <- aggregate(ndays ~ year, data = out, FUN=cumsum)[,2]
-  nHWdpy$nHWdays[which(nHWpy$year %in% as.numeric(names(table(out$year))))] <- unlist(lapply(1:length(extrNdays), function(x) extrNdays[[x]][length(extrNdays[[x]])]))  
-  
-  return(list(res = data_smoothwindow,
-              summaryHW = out,
-              noHWperyear = nHWpy,
-              noHWdaysperyear = nHWdpy))  
 }
 
 
@@ -92,20 +103,20 @@ extract_HWsw_summary <- function(obj, year_start, year_end,
 
 # Capriva
 location = "Capriva"
-load(paste0("dati/dataFVG/dati_ALL", location, ".Rdata"))
+load(paste0("data/dataFVG/dati_ALL", location, ".Rdata"))
 dataC <- dati[dati$citta == location,]
 
-res_C_up18 <- ts2clm(data= dataC, x = date, y = MaxT,
+res_C_up18 <- ts2clm3(data= dataC, x = date, y = MaxT,
                      climatologyPeriod = c("1995-01-01", "2018-12-31"),
-                     windowHalfWidth = 7, smoothPercentile = FALSE)
+                     windowHalfWidth = 7, smoothPercentile = FALSE, pctile = 90)
 extract_HWsw_summary_C <- extract_HWsw_summary(obj = res_C_up18, 
                                                year_start = 1995, 
                                                year_end = 2018)
 save(extract_HWsw_summary_C, file = "HeatwaveR/extract_HWsw_summary_C.Rdata")
 
-res_C_up24 <- ts2clm(data= dataC, x = date, y = MaxT,
+res_C_up24 <- ts2clm3(data= dataC, x = date, y = MaxT,
                      climatologyPeriod = c("1995-01-01", "2018-10-07"),
-                     windowHalfWidth = 7, smoothPercentile = FALSE)
+                     windowHalfWidth = 7, smoothPercentile = FALSE, pctile = 90)
 
 extract_HWsw_summary_C3 <- extract_HWsw_summary(obj = res_C_up24, 
                                                 year_start = 2019, 
@@ -116,12 +127,12 @@ save(extract_HWsw_summary_C3, file = "HeatwaveR/extract_HWsw_summary_Cwith2024.R
 
 # Trieste 
 location = "Trieste"
-load(paste0("dati/dataFVG/dati_ALL", location, ".Rdata"))
+load(paste0("data/dataFVG/dati_ALL", location, ".Rdata"))
 dataT <- dati[dati$citta == location,]
 
-res_T_up18 <- ts2clm(data= dataT, x = date, y = MaxT,
+res_T_up18 <- ts2clm3(data= dataT, x = date, y = MaxT,
                      climatologyPeriod = c("1995-01-01", "2018-12-31"),
-                     windowHalfWidth = 7, smoothPercentile = FALSE)
+                     windowHalfWidth = 7, smoothPercentile = FALSE, pctile = 90)
 
 
 extract_HWsw_summary_T <- extract_HWsw_summary(obj = res_T_up18, 
@@ -129,57 +140,39 @@ extract_HWsw_summary_T <- extract_HWsw_summary(obj = res_T_up18,
                                                year_end = 2018)
 save(extract_HWsw_summary_T, file = "HeatwaveR/extract_HWsw_summary_T.Rdata")
 
-res_T_up24 <- ts2clm(data= dataT, x = date, y = MaxT,
+res_T_up24 <- ts2clm3(data= dataT, x = date, y = MaxT,
                      climatologyPeriod = c("1995-01-01", "2018-10-07"),
-                     windowHalfWidth = 7, smoothPercentile = FALSE)
+                     windowHalfWidth = 7, smoothPercentile = FALSE, pctile = 90)
 
 extract_HWsw_summary_T3 <- extract_HWsw_summary(obj = res_T_up24, 
                                                 year_start = 2019, 
                                                 year_end = 2024)
 save(extract_HWsw_summary_T3, file = "HeatwaveR/extract_HWsw_summary_Twith2024.Rdata")
 
-# 
 # Capriva
 location = "Capriva"
-load(paste0("dati/dataFVG/dati_ALL", location, ".Rdata"))
+load(paste0("data/dataFVG/dati_ALL", location, ".Rdata"))
 dataC <- dati[dati$citta == location,]
 
-res_C_up18 <- ts2clm(data= dataC, x = date, y = MaxT,
+res_C_up18 <- ts2clm3(data= dataC, x = date, y = MaxT,
                      climatologyPeriod = c("1995-01-01", "2018-12-31"),
                      windowHalfWidth = 7, smoothPercentile = FALSE, pctile = 95)
 extract_HWsw_summary_C <- extract_HWsw_summary(obj = res_C_up18, year_start = 1995, year_end = 2018)
 save(extract_HWsw_summary_C, file = "HeatwaveR/extract_HWsw_summary_C95.Rdata")
 
-res_C_up24 <- ts2clm(data= dataC, x = date, y = MaxT,
-                     climatologyPeriod = c("1995-01-01", "2018-10-07"),
-                     windowHalfWidth = 7, smoothPercentile = FALSE, pctile = 95)
-
-extract_HWsw_summary_C3 <- extract_HWsw_summary(obj = res_C_up24, year_start = 2019, year_end = 2024)
-save(extract_HWsw_summary_C3, file = "HeatwaveR/extract_HWsw_summary_C95with2024.Rdata")
-
-
 
 # Trieste 
 location = "Trieste"
-load(paste0("dati/dataFVG/dati_ALL", location, ".Rdata"))
+load(paste0("data/dataFVG/dati_ALL", location, ".Rdata"))
 dataT <- dati[dati$citta == location,]
 
-res_T_up18 <- ts2clm(data= dataT, x = date, y = MaxT,
+res_T_up18 <- ts2clm3(data= dataT, x = date, y = MaxT,
                      climatologyPeriod = c("1995-01-01", "2018-12-31"),
                      windowHalfWidth = 7, smoothPercentile = FALSE, pctile = 95)
 
 
 extract_HWsw_summary_T <- extract_HWsw_summary(obj = res_T_up18, year_start = 1995, year_end = 2018)
 save(extract_HWsw_summary_T, file = "HeatwaveR/extract_HWsw_summary_T95.Rdata")
-
-res_T_up24 <- ts2clm(data= dataT, x = date, y = MaxT,
-                     climatologyPeriod = c("1995-01-01", "2018-10-07"),
-                     windowHalfWidth = 7, smoothPercentile = FALSE, pctile = 95)
-
-extract_HWsw_summary_T3 <- extract_HWsw_summary(obj = res_T_up24, year_start = 2019, year_end = 2024)
-save(extract_HWsw_summary_T3, file = "HeatwaveR/extract_HWsw_summary_T95with2024.Rdata")
-
-
 
 
 year_start <- 1995
@@ -213,8 +206,5 @@ database_Hwr_in <- data.frame(Type = "Hwr",
                                        extract_HWsw_summary_T$noHWdaysperyear$nHWdays),
                               period= "in")
 database_Hwr <- rbind.data.frame(database_Hwr_in, database_Hwr_out)
-save(database_Hwr, file = "ExtractedResults/database_Hwr.Rdata")
-
-
-
+save(database_Hwr, file = "HeatwaveR/database_Hwr.Rdata")
 

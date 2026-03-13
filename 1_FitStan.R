@@ -158,7 +158,6 @@ fit_NNNNN_T <- model_fitting(data = dataT, modfoo = foo_N_N_K5, trainStart = 199
 save(fit_NNNNN_T, file = "ResultsGST/fit_NNNNN_T_s.RData")
 rm(fit_NNNNN_T)
 
-fit_stan
 
 # Normal - Gumbel 
 fit_NNNNG_T <-  model_fitting(data = dataT, modfoo = foo_N_G_K5,  trainStart = 1995, trainEnd = 2018, 
