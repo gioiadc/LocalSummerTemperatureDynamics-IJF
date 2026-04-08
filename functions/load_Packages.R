@@ -25,7 +25,7 @@ library(ggh4x)
 library(patchwork)
 library(parallel)
 library(heatwaveR)
-
+library(cmdstanr)
 
 theme_set(bayesplot::theme_default())
 
