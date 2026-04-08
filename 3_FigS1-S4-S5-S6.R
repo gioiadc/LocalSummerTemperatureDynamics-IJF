@@ -44,7 +44,123 @@ ggsave(file="Plots/FigS1.pdf", width = 214, height = 120,
 
 # Extremal dependence index for Capriva, last regime Normal ----
 
-lags <- 1 # Set lags1 to obtain Fig S4, then set 5 to obtain Fig S5
+lags <- 1 # Fig S4
+u <- seq(0.5,0.98,0.01)
+
+# empirical result
+
+load("data/dataFVG/datiCapriva.Rdata")
+x <- dati$MaxT[dati$Year>2018]
+
+X <- cbind(head(x,length(x)-lags), x[-c(1:lags)])
+
+chi_vals <- sapply(lags, function(h) chi(X, nq = length(u), qlim = range(u)))
+chi_vals <- chi_vals[[1]]
+
+# MS results
+
+load("ExtractedResults/TempTrajCapriva_from2019_to2024_Bayes_1.Rda")
+load("ExtractedResults/TempTrajCapriva_from2019_to2024_Bayes_2.Rda")
+
+TempTraj <- c(TempTraj1, TempTraj2)
+rm(TempTraj1, TempTraj2)
+
+X <- do.call("rbind",TempTraj[[1]])
+matK2N <- list()
+for(i in 1:4000){
+  Xs <- cbind(head(X[,i],length(X[,i])-lags), X[-c(1:lags),i])
+  temp <- try(sapply(lags, function(h) chi(Xs, nq = length(u), qlim = range(u))), TRUE)
+  if(!is.character(temp)){
+    matK2N[[i]] <- temp[[1]]
+  } else {
+    matK2N[[i]] <- matrix(NA, nrow = length(u), ncol = 3)
+  }
+  print(i)
+}
+matK2N <- sapply(matK2N, function(mat) mat[, 2])
+
+X <- do.call("rbind",TempTraj[[2]])
+matK3N <- list()
+for(i in 1:4000){
+  Xs <- cbind(head(X[,i],length(X[,i])-lags), X[-c(1:lags),i])
+  temp <- try(sapply(lags, function(h) chi(Xs, nq = length(u), qlim = range(u))), TRUE)
+  if(!is.character(temp)){
+    matK3N[[i]] <- temp[[1]]
+  } else {
+    matK3N[[i]] <- matrix(NA, nrow = length(u), ncol = 3)
+  }
+  print(i)
+}
+matK3N <- sapply(matK3N, function(mat) mat[, 2])
+
+X <- do.call("rbind",TempTraj[[3]])
+matK4N <- list()
+for(i in 1:4000){
+  Xs <- cbind(head(X[,i],length(X[,i])-lags), X[-c(1:lags),i])
+  temp <- try(sapply(lags, function(h) chi(Xs, nq = length(u), qlim = range(u))), TRUE)
+  if(!is.character(temp)){
+    matK4N[[i]] <- temp[[1]]
+  } else {
+    matK4N[[i]] <- matrix(NA, nrow = length(u), ncol = 3)
+  }
+  print(i)
+}
+matK4N <- sapply(matK4N, function(mat) mat[, 2])
+
+X <- do.call("rbind",TempTraj[[4]])
+matK5N <- list()
+for(i in 1:4000){
+  Xs <- cbind(head(X[,i],length(X[,i])-lags), X[-c(1:lags),i])
+  temp <- try(sapply(lags, function(h) chi(Xs, nq = length(u), qlim = range(u))), TRUE)
+  if(!is.character(temp)){
+    matK5N[[i]] <- temp[[1]]
+  } else {
+    matK5N[[i]] <- matrix(NA, nrow = length(u), ncol = 3)
+  }
+  print(i)
+}
+matK5N <- sapply(matK5N, function(mat) mat[, 2])
+
+
+K2 <- melt(matK2N)
+K2$K <- 2
+K3 <- melt(matK3N)
+K3$K <- 3
+K4 <- melt(matK4N)
+K4$K <- 4
+K5 <- melt(matK5N)
+K5$K <- 5
+
+matPlot <- rbind.data.frame(K2, K3, K4, K5)
+matPlot$u <- u
+
+if(lags == 1){
+  chi_valsPlot <- cbind.data.frame(u = u, value = chi_vals[1:length(u),2],
+                                   valueLB = chi_vals[1:length(u),1],
+                                   valueUB = chi_vals[1:length(u),3],
+                                   K = rep(2:5, each = length(u)))
+} else {
+  chi_valsPlot <- cbind.data.frame(u = u, value = chi_vals[1:length(u),2],
+                                   valueLB = pmax(0,chi_vals[1:length(u),1]),
+                                   valueUB = chi_vals[1:length(u),3],
+                                   K = rep(2:5, each = length(u)))
+}
+
+
+ggplot(matPlot)+
+  geom_line(aes(x = u, y = value, group = X2), col = "darkgrey", alpha = 0.2)+ 
+  geom_line(data = chi_valsPlot, aes(x = u, y = value), col = "steelblue")+
+  geom_ribbon(data = chi_valsPlot, aes(x = u, ymin = valueLB, ymax = valueUB), 
+              fill = "steelblue", col = "steelblue", alpha = 0.5)+
+  geom_line(data = chi_valsPlot, aes(x = u, y = value))+
+  ylim(c(-0.15,1))+
+  ylab(expression(paste(chi,"(u)")))+
+  theme_light()+
+  facet_wrap(vars(K), ncol = 1)
+ggsave(paste0("Plots/chi_N_lag",lags,"_OUT_98.pdf"), width = 15, height = 15, units = "cm")
+
+## lag 5
+lags <- 5 # Fig S5
 u <- seq(0.5,0.98,0.01)
 
 # empirical result
