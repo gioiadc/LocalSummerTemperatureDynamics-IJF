@@ -37,7 +37,7 @@ ggplot(data = datiPlot, aes(x = doy, group = Site)) +
                      labels=c("May", "June", "July", "Aug", "Sept"))+
   facet_grid(cols = vars(Year), rows = vars(Site), scales = "free")
 
-ggsave(file="Plots/Fig2.pdf", width = 214, height = 120, 
+ggsave(file="Plots/FigS1.pdf", width = 214, height = 120, 
        dpi = 600, units = "mm")
 
 
