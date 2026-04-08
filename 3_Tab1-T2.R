@@ -2,6 +2,8 @@
 maxK <- 5
 label_LASTreg <- c("N", "G", "rW")
 
+source("functions/load_Packages.R")
+
 # Capriva ----
 load("ExtractedResults/looCapriva_up2018_Bayes.Rda")
 loo_table_Capriva <- matrix(unlist(lapply(1:length(loo), function(x) loo[[x]]$estimates[3,1])), 
