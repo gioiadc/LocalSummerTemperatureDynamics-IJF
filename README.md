@@ -28,13 +28,16 @@ Last update: March 13, 2026
 
   All file paths are relative to the root of the package. Please set your working directory accordingly, or open the `CodeGitHub.Rproj` file using RStudio.
 
-### `rstan`
-The package `rstan` requires a working C++ toolchain: 
+### `rstan` and `cmdstanr`
+The packages `rstan` and `cmdstanr` requires a working C++ toolchain: 
   
     - Windows users must install Rtools; 
     - macOS users must install Xcode Command Line Tools.
 
 These tools must be installed before running `renv::restore()`.
+
+The pacakge `cmdstanr` also requires that you have CmdStan installed. You can install it using CmdStanR’s `install_cmdstan()` function. 
+
 
 
 ### `renv`
