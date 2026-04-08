@@ -122,6 +122,8 @@ Results used in the paper are included in the repository to facilitate reproduct
 The repository has been tested from a clean R session using the environment specified in `renv.lock`.
 All figures and tables can be reproduced directly using the stored intermediate results without re-running the MCMC estimation starting from files named `3_[***].R`.
 
+For exact replication of the published results, we provide intermediate stored results. Re-running the full code may lead to small numerical variations due to the stochastic nature of the estimation procedures.
+
   1. Set the working directory to the `Code` folder or open the `CodeGitHub.Rproj` file using RStudio
   2. To reproduce the analysis using the last tested package versions, set the `renv` package as described in the [Software Environment](#software-environment) section
   3. Run the following scripts in order
