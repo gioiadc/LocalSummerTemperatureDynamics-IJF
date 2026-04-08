@@ -31,7 +31,7 @@ Last update: March 13, 2026
 ### `rstan` and `cmdstanr`
 The packages `rstan` and `cmdstanr` requires a working C++ toolchain: 
   
-    - Windows users must install Rtools; 
+    - Windows users must install Rtools44; 
     - macOS users must install Xcode Command Line Tools.
 
 These tools must be installed before running `renv::restore()`.
