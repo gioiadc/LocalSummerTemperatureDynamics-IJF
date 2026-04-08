@@ -1,9 +1,10 @@
 # This file reproduce results in the Supplementary Material:
 # - the posterior parameter summaries and trace plots for Capriva (K = 5, last.regime = "N")
 
+source("functions/load_Packages.R")
+
 ttheme_default(base.size = 8)
 
-source("functions/load_Packages.R")
 extracted_chains <- readRDS("ExtractedResults/extracted_samples.rds")
 summary_table <- rstan::monitor(extracted_chains, print = FALSE, warmup = 0)
 
